@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: #0F1A14;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #F0F7E8;
+  -webkit-font-smoothing: antialiased;
+}
+
+input::placeholder {
+  color: #4a6a5a;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
