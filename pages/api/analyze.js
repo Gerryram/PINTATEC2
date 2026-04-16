@@ -1,7 +1,3 @@
-// pages/api/analyze.js
-// Secure backend proxy — keeps your ANTHROPIC_API_KEY off the client
-
-// Increase body size limit for base64 images (up to 10MB)
 export const config = {
   api: {
     bodyParser: {
@@ -21,6 +17,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid request body" });
   }
 
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(500).json({ error: "API key not configured" });
+  }
+
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -30,22 +30,23 @@ export default async function handler(req, res) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
+        model: "claude-opus-4-6",
         max_tokens: 1024,
         messages,
       }),
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const error = await response.json();
-      console.error("Anthropic API error:", error);
-      return res.status(response.status).json({ error: error.error?.message || "API error" });
+      return res.status(response.status).json({ 
+        error: data.error?.message || "API error",
+        details: data 
+      });
     }
 
-    const data = await response.json();
     return res.status(200).json(data);
   } catch (err) {
-    console.error("Anthropic API error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: err.message });
   }
 }
