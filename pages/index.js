@@ -29,7 +29,7 @@ const MONTH_NAMES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"
 
 // ─── WhatsApp Utilities ────────────────────────────────────────────────────────
 
-const WA_NUMBER = "526641234567";
+const WA_NUMBER = "526644123046";
 
 function buildWAMessage(type, data = {}) {
   const { name, phone, address, date, time, service, tier, estimate, question } = data;
