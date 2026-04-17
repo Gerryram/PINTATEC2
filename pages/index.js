@@ -176,7 +176,7 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
   const handleFile = useCallback((file) => {
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       setImagePreview(e.target.result);
       setImageBase64(e.target.rconst compressed = await compressImage(e.target.result.split(",")[1]);
       setImageBase64(compressed);result.split(",")[1]);
