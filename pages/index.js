@@ -50,7 +50,7 @@ function buildWAMessage(type, data = {}) {
 function openWhatsApp(type, data) {
   const msg = buildWAMessage(type, data);
   window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
-}
+}compressImage
 
 // ─── Components ───────────────────────────────────────────────────────────────
 
@@ -178,7 +178,8 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
     const reader = new FileReader();
     reader.onload = (e) => {
       setImagePreview(e.target.result);
-      setImageBase64(e.target.result.split(",")[1]);
+      setImageBase64(e.target.rconst compressed = await compressImage(e.target.result.split(",")[1]);
+      setImageBase64(compressed);result.split(",")[1]);
     };
     reader.readAsDataURL(file);
   }, []);
