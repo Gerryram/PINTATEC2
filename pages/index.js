@@ -225,7 +225,7 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
       const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
       setResult({ ...parsed, service, tier });
       setStage("result");
-    } catch {
+    } catch (err) {       setError("Error: " + err?.message + " | status: " + (err?.status || "?"));       setStage("upload");     }
       setError("No se pudo analizar. Intenta nuevamente.");
       setStage("upload");
     }
