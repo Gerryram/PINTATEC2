@@ -203,7 +203,7 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
     const reader = new FileReader();
     reader.onload = async (e) => {
       setImagePreview(e.target.result);
-      setImageBase64(e.target.rconst compressed = await compressImage(e.target.result.split(",")[1]);
+      const handleFile = useCallback((file) => {     if (!file) return;     const reader = new FileReader();     reader.onload = async (e) => {       setImagePreview(e.target.result);       const compressed = await compressImage(e.target.result.split(",")[1]);       setImageBase64(compressed);     };     reader.readAsDataURL(file);   }, []); compressed = await compressImage(e.target.result.split(",")[1]);
       setImageBase64(compressed);result.split(",")[1]);
     };
     reader.readAsDataURL(file);
