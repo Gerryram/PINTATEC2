@@ -220,7 +220,11 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
         messages = [{ role:"user", content:`Genera presupuesto de ejemplo para ${service.label.toLowerCase()} en Tijuana con pintura ${tier.label} (${tier.brands[0]}, precio base $${tier.price}/m²). Responde SOLO en JSON sin markdown: {"area_estimada":60,"estado":"regular","capas":2,"precio_min":3500,"precio_max":5200,"observaciones":["superficie en buen estado","requiere sellador previo"],"tiempo_estimado":"2-3 días","confianza":"demo"}` }];
       }
       const response = await fetch("/api/analyze", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ messages }) });
-      const data = await response.json();
+      const data = await response.json();if (!response.ok) {
+  setError("HTTP " + response.status + ": " + JSON.stringify(data));
+  setStage("upload");
+  return;
+}
       const text = data.content?.find(b => b.type==="text")?.text || "";
       const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
       setResult({ ...parsed, service, tier });
