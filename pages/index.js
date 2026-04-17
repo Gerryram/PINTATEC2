@@ -50,7 +50,32 @@ function buildWAMessage(type, data = {}) {
 function openWhatsApp(type, data) {
   const msg = buildWAMessage(type, data);
   window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
-}compressImage
+}async function compressImage(base64, maxSizeKB = 800) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      let { width, height } = img;
+      const maxDim = 1200;
+      if (width > maxDim || height > maxDim) {
+        const ratio = Math.min(maxDim / width, maxDim / height);
+        width *= ratio;
+        height *= ratio;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+      let quality = 0.7;
+      let result = canvas.toDataURL("image/jpeg", quality);
+      while (result.length > maxSizeKB * 1024 * 1.37 && quality > 0.2) {
+        quality -= 0.1;
+        result = canvas.toDataURL("image/jpeg", quality);
+      }
+      resolve(result.split(",")[1]);
+    };
+    img.src = `data:image/jpeg;base64,${base64}`;
+  });
+}
 
 // ─── Components ───────────────────────────────────────────────────────────────
 
