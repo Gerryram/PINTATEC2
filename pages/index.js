@@ -525,7 +525,7 @@ function ScheduleScreen({ appointmentData }) {
         <div>
           <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:2, textTransform:"uppercase", fontFamily:"monospace", marginBottom:14 }}>Tus datos de contacto</div>
           <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:20 }}>
-            {[["👤 Nombre",name,setName,"Ej: Carlos Mendoza"],["📱 WhatsApp",phone,setPhone,"Ej: 664 123 4567"],["📍 Dirección en Tijuana",address,setAddress,"Ej: Calle, Col., Delegación"]].map(([lb,vl,st,ph]) => (
+            {[["👤 Nombre",name,setName,"Ej: Carlos Mendoza"],["📱 WhatsApp",phone,setPhone,"Ej: 6644123046"],["📍 Dirección en Tijuana",address,setAddress,"Ej: Calle, Col., Delegación"]].map(([lb,vl,st,ph]) => (
               <div key={lb}><div style={{ fontSize:12, color:COLORS.muted, marginBottom:6 }}>{lb}</div><input value={vl} onChange={e => st(e.target.value)} placeholder={ph} style={{ width:"100%", background:COLORS.surface, border:`1px solid ${COLORS.border}`, borderRadius:10, padding:"14px", color:COLORS.text, fontSize:14, outline:"none", boxSizing:"border-box" }} /></div>
             ))}
           </div>
@@ -607,7 +607,7 @@ export default function App() {
         <div style={{ padding:"18px 20px 14px", borderBottom:`1px solid ${COLORS.border}`, background:`${COLORS.bg}EE`, backdropFilter:"blur(20px)", position:"sticky", top:0, zIndex:50, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
           <Logo />
           <div style={{ background:`${COLORS.wa}22`, border:`1px solid ${COLORS.wa}44`, borderRadius:10, padding:"6px 12px", fontSize:11, color:COLORS.wa, fontFamily:"monospace", letterSpacing:1, cursor:"pointer" }} onClick={() => openWhatsApp("question",{question:"Hola, necesito información sobre sus servicios de pintura."})}>
-            💬 664 123 4567
+            💬 6644123046
           </div>
         </div>
         <div style={{ overflowY:"auto", maxHeight:"calc(100vh - 68px)" }}>
