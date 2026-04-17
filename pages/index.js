@@ -29,7 +29,7 @@ const MONTH_NAMES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"
 
 // ─── WhatsApp Utilities ────────────────────────────────────────────────────────
 
-const WA_NUMBER = "526641234567"; // Replace with real PINTATEC WhatsApp Business number
+const WA_NUMBER = "526641234567";
 
 function buildWAMessage(type, data = {}) {
   const { name, phone, address, date, time, service, tier, estimate, question } = data;
@@ -37,11 +37,8 @@ function buildWAMessage(type, data = {}) {
 
   const messages = {
     appointment: `🎨 *PINTATEC — Nueva Cita*\n\n👤 *Cliente:* ${name}\n📱 *Teléfono:* ${phone}\n📍 *Domicilio:* ${address}\n\n📅 *Fecha:* ${formattedDate}\n🕐 *Hora:* ${time}\n\n🔧 *Servicio:* ${service?.label}\n🎨 *Nivel pintura:* ${tier?.label}\n💰 *Estimado:* $${estimate?.precio_min?.toLocaleString()}–$${estimate?.precio_max?.toLocaleString()} MXN\n\n_Visita generada desde app PINTATEC_`,
-    
     quote_only: `🎨 *PINTATEC — Solicitud de Presupuesto*\n\n👤 *Cliente:* ${name || "No especificado"}\n📱 *Teléfono:* ${phone || "No especificado"}\n\n🔧 *Servicio:* ${service?.label}\n🎨 *Nivel:* ${tier?.label}\n📐 *Área est.:* ~${estimate?.area_estimada} m²\n💰 *Rango est.:* $${estimate?.precio_min?.toLocaleString()}–$${estimate?.precio_max?.toLocaleString()} MXN\n⏱️ *Tiempo:* ${estimate?.tiempo_estimado}\n\n_Enviado desde app PINTATEC_`,
-    
     question: `🎨 *PINTATEC — Consulta*\n\n${question}\n\n_Enviado desde app PINTATEC_`,
-    
     catalog: `🎨 *PINTATEC — Consulta de Catálogo*\n\nHola, vi el catálogo de pintura en la app y me interesa el nivel *${tier?.label}* (${tier?.brands?.[0]}).\n¿Podrían darme más información?\n\n_Enviado desde app PINTATEC_`,
   };
   return encodeURIComponent(messages[type] || messages.question);
@@ -50,7 +47,9 @@ function buildWAMessage(type, data = {}) {
 function openWhatsApp(type, data) {
   const msg = buildWAMessage(type, data);
   window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
-}async function compressImage(base64, maxSizeKB = 800) {
+}
+
+async function compressImage(base64, maxSizeKB = 800) {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
@@ -133,7 +132,6 @@ function BottomNav({ screen, setScreen }) {
 function HomeScreen({ setScreen }) {
   return (
     <div style={{ padding:"24px 20px 100px" }}>
-      {/* Hero */}
       <div style={{ background:`linear-gradient(135deg,${COLORS.card},#1E3528)`, borderRadius:20, padding:24, marginBottom:20, border:`1px solid ${COLORS.border}`, position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:-20, right:-20, width:120, height:120, borderRadius:"50%", background:`${COLORS.accent}15`, border:`1px solid ${COLORS.accent}30` }} />
         <div style={{ fontSize:12, color:COLORS.accent, letterSpacing:3, textTransform:"uppercase", marginBottom:8, fontFamily:"monospace" }}>✦ Cotización Instantánea con IA</div>
@@ -147,7 +145,6 @@ function HomeScreen({ setScreen }) {
         </div>
       </div>
 
-      {/* Stats */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10, marginBottom:20 }}>
         {[["500+","Casas pintadas"],["98%","Satisfacción"],["4 años","Garantía máx."]].map(([n,l]) => (
           <div key={l} style={{ background:COLORS.surface, borderRadius:14, padding:"14px 10px", textAlign:"center", border:`1px solid ${COLORS.border}` }}>
@@ -157,7 +154,6 @@ function HomeScreen({ setScreen }) {
         ))}
       </div>
 
-      {/* WhatsApp Direct Access Banner */}
       <div style={{ background:`${COLORS.wa}18`, border:`1px solid ${COLORS.wa}44`, borderRadius:16, padding:16, marginBottom:20, display:"flex", alignItems:"center", gap:14 }}>
         <div style={{ fontSize:36 }}>💬</div>
         <div style={{ flex:1 }}>
@@ -167,7 +163,6 @@ function HomeScreen({ setScreen }) {
         <WAButton label="Chatear" onClick={() => openWhatsApp("question", { question:"Hola, quiero información sobre pintura de mi casa." })} size="small" style={{ whiteSpace:"nowrap" }} />
       </div>
 
-      {/* Services */}
       <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:3, textTransform:"uppercase", fontFamily:"monospace", marginBottom:12 }}>Nuestros Servicios</div>
       <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
         {SERVICES.map(s => (
@@ -203,8 +198,8 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
     const reader = new FileReader();
     reader.onload = async (e) => {
       setImagePreview(e.target.result);
-      const handleFile = useCallback((file) => {     if (!file) return;     const reader = new FileReader();     reader.onload = async (e) => {       setImagePreview(e.target.result);       const compressed = await compressImage(e.target.result.split(",")[1]);       setImageBase64(compressed);     };     reader.readAsDataURL(file);   }, []); compressed = await compressImage(e.target.result.split(",")[1]);
-      setImageBase64(compressed);result.split(",")[1]);
+      const compressed = await compressImage(e.target.result.split(",")[1]);
+      setImageBase64(compressed);
     };
     reader.readAsDataURL(file);
   }, []);
@@ -260,14 +255,12 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
 
         {imagePreview && <div style={{ borderRadius:14, overflow:"hidden", marginBottom:16, height:150 }}><img src={imagePreview} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} /></div>}
 
-        {/* Price */}
         <div style={{ background:`linear-gradient(135deg,${COLORS.card},#1E3528)`, borderRadius:20, padding:22, marginBottom:14, textAlign:"center", border:`1px solid ${COLORS.accent}44` }}>
           <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:3, textTransform:"uppercase", fontFamily:"monospace", marginBottom:6 }}>Rango estimado</div>
           <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:44, color:COLORS.accent, lineHeight:1 }}>${result.precio_min?.toLocaleString()} – ${result.precio_max?.toLocaleString()}</div>
           <div style={{ color:COLORS.muted, fontSize:12, marginTop:4 }}>MXN · Incluye mano de obra y materiales</div>
         </div>
 
-        {/* Details */}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:14 }}>
           {[["📐","Área est.",`~${result.area_estimada} m²`],["🎨","Pintura",tier.label],["🖌️","Capas",`${result.capas} manos`],["⏱️","Tiempo",result.tiempo_estimado]].map(([ic,lb,vl]) => (
             <div key={lb} style={{ background:COLORS.surface, borderRadius:12, padding:14, border:`1px solid ${COLORS.border}` }}>
@@ -287,7 +280,6 @@ function EstimateScreen({ setScreen, setAppointmentData }) {
 
         {result.confianza === "demo" && <div style={{ background:`${COLORS.warm}22`, border:`1px solid ${COLORS.warm}44`, borderRadius:10, padding:"10px 14px", marginBottom:14, fontSize:12, color:COLORS.warm }}>⚠️ Modo demo — sube una foto real para mayor precisión</div>}
 
-        {/* CTAs */}
         <button onClick={() => { setAppointmentData({ service, tier, estimate:result }); setScreen("schedule"); }} style={{ width:"100%", background:`linear-gradient(135deg,${COLORS.accent},${COLORS.accentDark})`, color:COLORS.bg, border:"none", borderRadius:14, padding:"16px", fontFamily:"'Bebas Neue',sans-serif", fontSize:19, letterSpacing:3, cursor:"pointer", boxShadow:`0 8px 24px ${COLORS.accent}44`, marginBottom:10 }}>
           📅 AGENDAR VISITA GRATUITA
         </button>
@@ -388,14 +380,9 @@ function CatalogScreen() {
         <div style={{ marginBottom:14 }}>
           {tier.brands.map(b => <div key={b} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}><div style={{ width:6, height:6, borderRadius:"50%", background:tier.color }} /><span style={{ color:COLORS.text, fontSize:13 }}>{b}</span></div>)}
         </div>
-        <WAButton
-          label={`Cotizar pintura ${tier.label}`}
-          onClick={() => openWhatsApp("catalog", { tier })}
-          style={{ width:"100%" }}
-        />
+        <WAButton label={`Cotizar pintura ${tier.label}`} onClick={() => openWhatsApp("catalog", { tier })} style={{ width:"100%" }} />
       </div>
 
-      {/* Color swatches */}
       <div>
         <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:2, textTransform:"uppercase", fontFamily:"monospace", marginBottom:12 }}>Colores populares</div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:8 }}>
@@ -404,7 +391,6 @@ function CatalogScreen() {
         <div style={{ color:COLORS.muted, fontSize:11, textAlign:"center", marginTop:10 }}>+200 colores · Ver catálogo completo en visita domiciliaria</div>
       </div>
 
-      {/* Comparison */}
       <div style={{ marginTop:24 }}>
         <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:2, textTransform:"uppercase", fontFamily:"monospace", marginBottom:12 }}>Comparativa de niveles</div>
         <div style={{ background:COLORS.surface, borderRadius:14, overflow:"hidden", border:`1px solid ${COLORS.border}` }}>
@@ -435,27 +421,14 @@ function ScheduleScreen({ appointmentData }) {
 
   const handleConfirm = async () => {
     setBooked(true);
-
-    // Save appointment to backend (Vercel KV + email notification)
-    const dateStr = selectedDate
-      ? `${DAY_NAMES[selectedDate.getDay()]} ${selectedDate.getDate()} ${MONTH_NAMES[selectedDate.getMonth()]}`
-      : "";
+    const dateStr = selectedDate ? `${DAY_NAMES[selectedDate.getDay()]} ${selectedDate.getDate()} ${MONTH_NAMES[selectedDate.getMonth()]}` : "";
     try {
       await fetch("/api/appointments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name, phone, address,
-          date: dateStr,
-          time: selectedTime,
-          service: appointmentData?.service,
-          tier: appointmentData?.tier,
-          estimate: appointmentData?.estimate,
-        }),
+        body: JSON.stringify({ name, phone, address, date: dateStr, time: selectedTime, service: appointmentData?.service, tier: appointmentData?.tier, estimate: appointmentData?.estimate }),
       });
     } catch { /* Silent — WhatsApp is fallback */ }
-
-    // Open WhatsApp with appointment summary
     setTimeout(() => {
       openWhatsApp("appointment", { name, phone, address, date:selectedDate, time:selectedTime, service:appointmentData?.service, tier:appointmentData?.tier, estimate:appointmentData?.estimate });
     }, 1200);
@@ -469,7 +442,6 @@ function ScheduleScreen({ appointmentData }) {
         {selectedDate && `${DAY_NAMES[selectedDate.getDay()]} ${selectedDate.getDate()} ${MONTH_NAMES[selectedDate.getMonth()]}`} · {selectedTime}
       </div>
       <div style={{ color:COLORS.muted, fontSize:13, marginBottom:28 }}>Un especialista irá a tu domicilio</div>
-
       <div style={{ background:COLORS.surface, borderRadius:16, padding:20, marginBottom:20, textAlign:"left", border:`1px solid ${COLORS.border}` }}>
         {[["👤",name],["📱",phone],["📍",address]].map(([ic,vl]) => (
           <div key={ic} style={{ display:"flex", gap:10, padding:"8px 0", borderBottom:`1px solid ${COLORS.border}` }}>
@@ -477,16 +449,10 @@ function ScheduleScreen({ appointmentData }) {
           </div>
         ))}
       </div>
-
-      {/* WhatsApp confirmation CTA */}
       <div style={{ background:`${COLORS.wa}18`, border:`1px solid ${COLORS.wa}44`, borderRadius:16, padding:18, marginBottom:16 }}>
         <div style={{ fontSize:13, color:COLORS.text, fontWeight:700, marginBottom:6 }}>💬 Confirmación por WhatsApp</div>
         <div style={{ fontSize:12, color:COLORS.muted, marginBottom:14, lineHeight:1.6 }}>Se abrirá WhatsApp con el resumen de tu cita. Envíalo para confirmar con nuestro equipo.</div>
-        <WAButton
-          label="Confirmar por WhatsApp ahora"
-          onClick={() => openWhatsApp("appointment", { name, phone, address, date:selectedDate, time:selectedTime, service:appointmentData?.service, tier:appointmentData?.tier, estimate:appointmentData?.estimate })}
-          style={{ width:"100%", justifyContent:"center" }}
-        />
+        <WAButton label="Confirmar por WhatsApp ahora" onClick={() => openWhatsApp("appointment", { name, phone, address, date:selectedDate, time:selectedTime, service:appointmentData?.service, tier:appointmentData?.tier, estimate:appointmentData?.estimate })} style={{ width:"100%", justifyContent:"center" }} />
       </div>
       <div style={{ color:COLORS.muted, fontSize:11 }}>Servicio de visita 100% gratuito · Sin compromiso</div>
     </div>
@@ -497,7 +463,6 @@ function ScheduleScreen({ appointmentData }) {
       <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:28, color:COLORS.text, letterSpacing:2, marginBottom:4 }}>AGENDAR VISITA</div>
       <div style={{ color:COLORS.muted, fontSize:13, marginBottom:20 }}>Visita gratuita · Presupuesto exacto · Sin compromiso</div>
 
-      {/* Progress */}
       <div style={{ display:"flex", gap:6, marginBottom:24 }}>
         {["Fecha","Hora","Datos","Confirmar"].map((s,i) => (
           <div key={s} style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
@@ -513,7 +478,6 @@ function ScheduleScreen({ appointmentData }) {
         </div>
       )}
 
-      {/* Step 1: Date */}
       {step===1 && (
         <div>
           <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:2, textTransform:"uppercase", fontFamily:"monospace", marginBottom:14 }}>Selecciona una fecha</div>
@@ -532,7 +496,6 @@ function ScheduleScreen({ appointmentData }) {
         </div>
       )}
 
-      {/* Step 2: Time */}
       {step===2 && (
         <div>
           <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:2, textTransform:"uppercase", fontFamily:"monospace", marginBottom:14 }}>Selecciona un horario</div>
@@ -553,7 +516,6 @@ function ScheduleScreen({ appointmentData }) {
         </div>
       )}
 
-      {/* Step 3: Contact */}
       {step===3 && (
         <div>
           <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:2, textTransform:"uppercase", fontFamily:"monospace", marginBottom:14 }}>Tus datos de contacto</div>
@@ -571,7 +533,6 @@ function ScheduleScreen({ appointmentData }) {
         </div>
       )}
 
-      {/* Step 4: Confirm */}
       {step===4 && (
         <div>
           <div style={{ fontSize:11, color:COLORS.muted, letterSpacing:2, textTransform:"uppercase", fontFamily:"monospace", marginBottom:14 }}>Confirma tu cita</div>
@@ -583,13 +544,10 @@ function ScheduleScreen({ appointmentData }) {
               </div>
             ))}
           </div>
-
-          {/* WhatsApp info */}
           <div style={{ background:`${COLORS.wa}18`, border:`1px solid ${COLORS.wa}33`, borderRadius:12, padding:"12px 16px", marginBottom:16, display:"flex", gap:10, alignItems:"flex-start" }}>
             <span style={{ fontSize:20 }}>💬</span>
             <div style={{ fontSize:12, color:COLORS.muted, lineHeight:1.6 }}>Al confirmar, se abrirá WhatsApp con el resumen de tu cita para que lo envíes directamente a nuestro equipo.</div>
           </div>
-
           <div style={{ display:"flex", gap:8 }}>
             <button onClick={() => setStep(3)} style={{ flex:1, background:COLORS.surface, border:`1px solid ${COLORS.border}`, color:COLORS.text, borderRadius:14, padding:"14px", cursor:"pointer" }}>← Editar</button>
             <button onClick={handleConfirm} style={{ flex:2, background:`linear-gradient(135deg,${COLORS.accent},${COLORS.accentDark})`, color:COLORS.bg, border:"none", borderRadius:14, padding:"16px", fontFamily:"'Bebas Neue',sans-serif", fontSize:18, letterSpacing:2, cursor:"pointer", boxShadow:`0 8px 24px ${COLORS.accent}44` }}>
@@ -616,7 +574,6 @@ export default function App() {
     }
   }, []);
 
-  // Run once
   useState(() => { captureInstall(); }, []);
 
   const handleInstall = async () => {
@@ -640,34 +597,33 @@ export default function App() {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
       </Head>
-    <div style={{ background:COLORS.bg, minHeight:"100vh", maxWidth:430, margin:"0 auto", fontFamily:"'Segoe UI',system-ui,sans-serif", color:COLORS.text, position:"relative" }}>
-      <style>{`*{box-sizing:border-box} button{font-family:inherit} input::placeholder{color:#4a6a5a} ::-webkit-scrollbar{width:0}`}</style>
-      <div style={{ padding:"18px 20px 14px", borderBottom:`1px solid ${COLORS.border}`, background:`${COLORS.bg}EE`, backdropFilter:"blur(20px)", position:"sticky", top:0, zIndex:50, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <Logo />
-        <div style={{ background:`${COLORS.wa}22`, border:`1px solid ${COLORS.wa}44`, borderRadius:10, padding:"6px 12px", fontSize:11, color:COLORS.wa, fontFamily:"monospace", letterSpacing:1, cursor:"pointer" }} onClick={() => openWhatsApp("question",{question:"Hola, necesito información sobre sus servicios de pintura."})}>
-          💬 664 123 4567
-        </div>
-      </div>
-      <div style={{ overflowY:"auto", maxHeight:"calc(100vh - 68px)" }}>
-        {screen==="home" && <HomeScreen setScreen={setScreen} />}
-        {screen==="estimate" && <EstimateScreen setScreen={setScreen} setAppointmentData={setAppointmentData} />}
-        {screen==="catalog" && <CatalogScreen />}
-        {screen==="schedule" && <ScheduleScreen appointmentData={appointmentData} />}
-      </div>
-      {/* PWA Install Banner */}
-      {showInstallBanner && (
-        <div style={{ position:"fixed", bottom:80, left:"50%", transform:"translateX(-50%)", width:"calc(100% - 32px)", maxWidth:398, background:`${COLORS.card}F5`, backdropFilter:"blur(20px)", border:`1px solid ${COLORS.accent}44`, borderRadius:16, padding:"14px 16px", display:"flex", alignItems:"center", gap:12, zIndex:200, boxShadow:`0 8px 32px #00000088` }}>
-          <span style={{ fontSize:28 }}>📲</span>
-          <div style={{ flex:1 }}>
-            <div style={{ fontSize:13, fontWeight:700, color:COLORS.text }}>Instalar PINTATEC</div>
-            <div style={{ fontSize:11, color:COLORS.muted }}>Acceso rápido desde tu pantalla de inicio</div>
+      <div style={{ background:COLORS.bg, minHeight:"100vh", maxWidth:430, margin:"0 auto", fontFamily:"'Segoe UI',system-ui,sans-serif", color:COLORS.text, position:"relative" }}>
+        <style>{`*{box-sizing:border-box} button{font-family:inherit} input::placeholder{color:#4a6a5a} ::-webkit-scrollbar{width:0}`}</style>
+        <div style={{ padding:"18px 20px 14px", borderBottom:`1px solid ${COLORS.border}`, background:`${COLORS.bg}EE`, backdropFilter:"blur(20px)", position:"sticky", top:0, zIndex:50, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <Logo />
+          <div style={{ background:`${COLORS.wa}22`, border:`1px solid ${COLORS.wa}44`, borderRadius:10, padding:"6px 12px", fontSize:11, color:COLORS.wa, fontFamily:"monospace", letterSpacing:1, cursor:"pointer" }} onClick={() => openWhatsApp("question",{question:"Hola, necesito información sobre sus servicios de pintura."})}>
+            💬 664 123 4567
           </div>
-          <button onClick={handleInstall} style={{ background:`linear-gradient(135deg,${COLORS.accent},${COLORS.accentDark})`, color:COLORS.bg, border:"none", borderRadius:10, padding:"8px 14px", fontSize:12, fontWeight:700, cursor:"pointer" }}>Instalar</button>
-          <button onClick={() => setShowInstallBanner(false)} style={{ background:"none", border:"none", color:COLORS.muted, fontSize:18, cursor:"pointer", padding:4 }}>×</button>
         </div>
-      )}
-      <BottomNav screen={screen} setScreen={setScreen} />
-    </div>
+        <div style={{ overflowY:"auto", maxHeight:"calc(100vh - 68px)" }}>
+          {screen==="home" && <HomeScreen setScreen={setScreen} />}
+          {screen==="estimate" && <EstimateScreen setScreen={setScreen} setAppointmentData={setAppointmentData} />}
+          {screen==="catalog" && <CatalogScreen />}
+          {screen==="schedule" && <ScheduleScreen appointmentData={appointmentData} />}
+        </div>
+        {showInstallBanner && (
+          <div style={{ position:"fixed", bottom:80, left:"50%", transform:"translateX(-50%)", width:"calc(100% - 32px)", maxWidth:398, background:`${COLORS.card}F5`, backdropFilter:"blur(20px)", border:`1px solid ${COLORS.accent}44`, borderRadius:16, padding:"14px 16px", display:"flex", alignItems:"center", gap:12, zIndex:200, boxShadow:`0 8px 32px #00000088` }}>
+            <span style={{ fontSize:28 }}>📲</span>
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:13, fontWeight:700, color:COLORS.text }}>Instalar PINTATEC</div>
+              <div style={{ fontSize:11, color:COLORS.muted }}>Acceso rápido desde tu pantalla de inicio</div>
+            </div>
+            <button onClick={handleInstall} style={{ background:`linear-gradient(135deg,${COLORS.accent},${COLORS.accentDark})`, color:COLORS.bg, border:"none", borderRadius:10, padding:"8px 14px", fontSize:12, fontWeight:700, cursor:"pointer" }}>Instalar</button>
+            <button onClick={() => setShowInstallBanner(false)} style={{ background:"none", border:"none", color:COLORS.muted, fontSize:18, cursor:"pointer", padding:4 }}>×</button>
+          </div>
+        )}
+        <BottomNav screen={screen} setScreen={setScreen} />
+      </div>
     </>
   );
 }
